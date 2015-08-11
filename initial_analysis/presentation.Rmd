@@ -90,10 +90,11 @@ Nearly the same percentages of queries from US got results (76.28% in A vs 76.29
 * We're getting into the workflow of how to analyse the data that comes in.
 
 ### What didn't work
-* The data format needs a ton of tweaks. Mikhail has taken the lead on drafting a proposal for a new format, which LGTM.
-* Setting things up as a proper scientific experiment (Theory - Hypothesis - Experiment - Result) wasn't done. In future we
+
+1. The data format needs a ton of tweaks. Mikhail has taken the lead on drafting a proposal for a new format, which LGTM.
+2. Setting things up as a proper scientific experiment (Theory - Hypothesis - Experiment - Result) wasn't done. In future we
 need to include the Swifties in conversations about what we're doing + how + why if we want the results to be useful.
-* Due to (2) we haven't advanced our knowledge around search, which is a big benefit of running these tests.
+3. Due to (2) we haven't advanced our knowledge around search, which is a big benefit of running these tests.
 
 ## Conclusions
 * The system works;

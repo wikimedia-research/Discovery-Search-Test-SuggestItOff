@@ -76,7 +76,7 @@ with(keep_where(data, class != "Spider"), {
   # chisq.test(x)
   # mosaic::oddsRatio(x, verbose = TRUE)
   mosaicplot(t(x), color = c("cornflowerblue", "orange"), border = "white",
-           main = "Actual users",
+           main = "Actual users", cex.axis = 1,
            sub = "p = 0.004, OR = 1.006 (95%: 1.002, 1.01)",
            xlab = "Got zero results", ylab = "Test group")
 })
@@ -85,7 +85,7 @@ with(keep_where(data, class == "Spider"), {
   # chisq.test(x)
   # mosaic::oddsRatio(x, verbose = TRUE)
   mosaicplot(t(x), color = c("cornflowerblue", "orange"), border = "white",
-           main = "Spiders",
+           main = "Spiders", cex.axis = 1,
            sub = "p = 0.007, OR = 1.005 (95%: 1.001, 1.009)",
            xlab = "Got zero results", ylab = "Test group")
 })
@@ -101,7 +101,6 @@ with(keep_where(data, country == "US" & class != "Spider"), {
 ```
 
 **Hypothesis**: Group (A/B) and Results (Y/N) are independent.
-
 
 ```r
 group_results_odds_ratio <- with(data, {
