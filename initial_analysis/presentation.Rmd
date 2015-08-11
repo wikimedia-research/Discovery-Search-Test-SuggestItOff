@@ -23,4 +23,8 @@ output:
 ## The methodology
 
 * 10% of the search sessions
-* Half got the "control"; half got different smoothing algorithm + reduced certainty.
+* Half got the default ("control"); half got different smoothing algorithm + reduced certainty ("treatment").
+
+## Testing sampling
+
+![foo](../source_variation.png)
