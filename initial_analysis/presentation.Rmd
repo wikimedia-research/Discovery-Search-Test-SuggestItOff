@@ -1,0 +1,18 @@
+---
+title: "Suggestion Confidence Initial Analysis"
+author: "Oliver Keyes and Mikhail Popov"
+date: "August 12, 2015"
+output:
+  ioslides_presentation:
+    logo: wmf.png
+---
+
+## R Markdown
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
