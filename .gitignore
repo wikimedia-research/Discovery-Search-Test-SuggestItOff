@@ -4,3 +4,4 @@ private.R
 *.RData
 *.log
 *.tsv
+*.html
