@@ -7,12 +7,20 @@ output:
     logo: wmf.png
 ---
 
-## R Markdown
+## TL;DR
 
-This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+* The system works;
+* [did the change work]
+* Things are promising, but we have some work to do before the next test.
 
-## Slide with Bullets
+## The Test
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+* We wanted to reduce the rate of zero results.
+* One way of doing this is to reduce the required "certainty" in a suggestion before Cirrus provides it to the user.
+* Lower certainty == more results given!
+* At the same time, we changed the smoothing algorithm to avoid giving *bad* results.
+
+## The methodology
+
+* 10% of the search sessions
+* Half got the "control"; half got different smoothing algorithm + reduced certainty.

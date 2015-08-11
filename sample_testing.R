@@ -40,5 +40,17 @@ geographic_variation <- function(dataset){
 }
 
 sanitised_geo_variation <- geographic_variation(data[ip != "85.13.134.246"])
-data[ip != "85.13.134.246", j = list(events = .N), by = c("test_group","country")]
-data <- data[,j= .N, by = c("test_group", "ip", "project", "user_agent", "results", "source", "country")]
+ggsave(filename = "post_cleanup_geo_variation.png",
+       plot = ggplot(sanitised_geo_variation, aes(x = reorder(country, events), y = events, fill = factor(test_group))) +
+         geom_bar(stat="identity", position = "dodge") +
+         theme_fivethirtyeight() + scale_x_discrete() + scale_y_continuous() +
+         labs(title = "Top countries for each test group, after cleanup") + coord_flip())
+
+# Check source
+source_data <- data[,j=as.data.frame(table(source), stringsAsFactors = FALSE), by = c("test_group")]
+setnames(source_data, 3, "events")
+ggsave(filename = "source_variation.png",
+       plot = ggplot(source_data, aes(x = reorder(source, events), y = events, fill = factor(test_group))) +
+         geom_bar(stat="identity", position = "dodge") +
+         theme_fivethirtyeight() + scale_x_discrete() + scale_y_continuous() +
+         labs(title = "Source of A/B test events") + coord_flip())
