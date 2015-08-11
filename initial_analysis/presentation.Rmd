@@ -7,12 +7,6 @@ output:
     logo: wmf.png
 ---
 
-## TL;DR
-
-* The system works;
-* [did the change work]
-* Things are promising, but we have some work to do before the next test.
-
 ## The Test
 
 * We wanted to reduce the rate of zero results.
@@ -24,7 +18,41 @@ output:
 
 * 10% of the search sessions
 * Half got the default ("control"); half got different smoothing algorithm + reduced certainty ("treatment").
+* Due to difficulty of handling the data format, only an initial sample; 7m events from 7 August.
 
 ## Testing sampling
 
-![foo](../source_variation.png)
+* Check that sampling works!
+* On the face of it, it appears to; 0.01% variation in events between groups.
+
+## Browsers
+<img src="../post_cleanup_browser_variation.png" width="100%">
+
+## Geography
+<img src="../post_cleanup_geo_variation.png" width="100%">
+
+## Analysis
+
+* So, sampling works - what next?
+* Analyse the actual data, looking for a statistically significant variation in whether any results were returned (TRUE) versus
+none whatsoever (FALSE)
+* Over to Mikhail!
+
+## Retrospective
+
+### What worked
+* All the key infrastructure for Inf future A/B tests is built, remarkably fast
+* We're getting into the workflow of how to analyse the data that comes in.
+
+### What didn't work
+* The data format needs a ton of tweaks. Mikhail has taken the lead on drafting a proposal for a new format, which LGTM.
+* Setting things up as a proper scientific experiment (Theory - Hypothesis - Experiment - Result) wasn't done. In future we
+need to include the Swifties in conversations about what we're doing + how + why if we want the results to be useful.
+* Due to (2) we haven't advanced our knowledge around search, which is a big benefit of running these tests.
+
+## Conclusions
+* The system works;
+* [did the change work]
+* Things are promising, but we have some work to do before the next test.
+
+
