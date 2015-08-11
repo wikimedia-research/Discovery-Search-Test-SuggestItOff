@@ -35,6 +35,9 @@ def write_file(results, filepath):
         converted_result.append(result[key]);
       write_obj.writerow(converted_result);
       
+    
+  
+
 connection = open("CirrusSearchUserTesting.log");
 output = [];
 for line in connection:
@@ -42,5 +45,8 @@ for line in connection:
       output.append(sanitise_line(line))
   except:
       print(".")
+    
+  
+
 write_file(output, args.out_file);
 exit();
