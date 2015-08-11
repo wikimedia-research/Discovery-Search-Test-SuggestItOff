@@ -4,66 +4,54 @@ author: "Mikhail Popov"
 date: "August 11, 2015"
 output:
   html_document:
-    highlight: espresso
     keep_md: yes
     theme: united
     toc: yes
     toc_depth: 4
+    self_contained: true
 ---
 
 ## Packages Used In Analysis
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 # install.packages('ggthemes', dependencies = TRUE) # for theme_fivethirtyeight
 # install.packages('import') # for importing specific functions from packages
-c("magrittr", "tidyr", "knitr", "ggplot2", "ggthemes") %>%
+# install.packages(
+#   'printr',
+#   type = 'source',
+#   repos = c('http://yihui.name/xran', 'http://cran.rstudio.com')
+# )
+c("magrittr", "tidyr", "knitr", "ggplot2", "ggthemes", "printr") %>%
   sapply(library, character.only = TRUE) %>% invisible
 import::from(dplyr, select, arrange, rename, mutate, summarise, keep_where = filter)
 ```
 
-```{r, echo = FALSE}
-# Data Import
-load("initial_analysis/ab_test_initial_data.RData")
-data$zero_results <- factor(data$results, c(FALSE, TRUE), c("Yes", "No"))
-data$results <- factor(data$results, c(TRUE, FALSE), c("Yes", "No"))
-data$test_group <- factor(data$test_group)
-data$project <- factor(data$project)
-data$source <- factor(data$project)
-data$country <- factor(data$country)
-data$browser <- factor(data$browser)
-data$class <- factor(data$class)
+```{r}
+load("ab_test_initial_data_exclude-abuser.RData")
 ```
 
 ## Data Cleanup
 
-Oliver has taken care of parsing the log files from JSON-y format to a tabular one. He has also mapped IP addresses to country codes and parsed the user agents and tagged known automata. He also noticed that the IP address **85.13.134.246** from Germany is an abusive spider responsible for 2.1 million of the observations. We are excluding this user from analysis.
-
-```{r}
-data <- keep_where(data, ip != "85.13.134.246")
-```
+Oliver has taken care of parsing the log files from JSON-y format to a tabular one. He has also mapped IP addresses to country codes and parsed the user agents and tagged known automata. He also noticed that a specific IP address from Germany is an abusive spider responsible for 2.1 million of the observations. We are excluding this "user" from analysis.
 
 ## Summary Statistics
 
-```{r}
-mosaicplot(zero_results ~ test_group, data = data, shade = TRUE,
-           main = "Association of test group and zero results",
-           xlab = "Got zero results", ylab = "Test group")
+```{r, results='asis'}
+with(data, {
+  table(test_group, results) %>% prop.table(margin = 1)
+}) %>% kable
 ```
 
-```{r, echo = FALSE}
-chisq_test_results <- with(data, {
-  chisq.test(x = test_group, y = zero_results, correct = FALSE)
-}) # chisq_test_results$stdres
+## Significance Testing
+
+```{r association_mosaic}
+mosaicplot(results ~ test_group, data = data, shade = TRUE,
+           main = "Association of test group and results",
+           xlab = "Got results", ylab = "Test group")
+# We can see from this mosaic plot that there might be an association.
 ```
 
-When we look at the standardized residuals (shown in the mosaic plot above), we see that (very slightly) less users would have gotten ...
-
-|   |       Yes|        No|
-|:--|---------:|---------:|
-|a  |  2.684949| -2.684949|
-|b  | -2.684949|  2.684949|
-
-```{r}
+```{r association_mosaic_by_class, fig.width = 10, fig.height = 5}
 par(mfrow = c(1, 2))
 mosaicplot(zero_results ~ test_group, data = keep_where(data, class != "Spider"),
            shade = TRUE, sub = "(Actual users)",
@@ -75,7 +63,18 @@ mosaicplot(zero_results ~ test_group, data = keep_where(data, class == "Spider")
            xlab = "Got zero results", ylab = "Test group")
 ```
 
-## Significance Testing
+**Hypothesis**: Group (A/B) and Results (Y/N) are independent.
+
+With a large sample...
+
+When we look at the standardized residuals (also shown in the mosaic plot above), we see that slightly more users form Group B would have gotten results than if the variables were truly independent.
+
+```{r, echo = FALSE, results = 'asis'}
+chisq_test_results <- with(data, {
+  chisq.test(x = test_group, y = results, correct = FALSE)
+})
+kable(chisq_test_results$stdres)
+```
 
 ```{r}
 # install.packages('Exact') # for exact.test

@@ -1,6 +1,6 @@
 .Rproj.user
 .Rhistory
+private.R
 *.RData
 *.log
 *.tsv
-*.html

@@ -4,7 +4,9 @@ author: "Oliver Keyes and Mikhail Popov"
 date: "August 12, 2015"
 output:
   ioslides_presentation:
+    fig_retina: null
     logo: wmf.png
+    smaller: true
 ---
 
 ## The Test
@@ -38,6 +40,22 @@ output:
 none whatsoever (FALSE)
 * Over to Mikhail!
 
+## Exploratory data analysis
+
+<img src="notebook_files/figure-html/association_mosaic-1.png" style = "width:100%;">
+
+Comment...
+
+## Breakdown by class
+
+<img src="notebook_files/figure-html/association_mosaic_by_class-1.png" style = "width:100%">
+
+Description...
+
+## Inferential analysis
+
+...stuff...
+
 ## Retrospective
 
 ### What worked
@@ -54,5 +72,3 @@ need to include the Swifties in conversations about what we're doing + how + why
 * The system works;
 * [did the change work]
 * Things are promising, but we have some work to do before the next test.
-
-
