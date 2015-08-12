@@ -93,11 +93,23 @@ data %>%
 
 ## Significance Testing
 
-```{r association_mosaic}
+```{r association_mosaic_shade}
 mosaicplot(results ~ test_group, data = data, shade = TRUE,
            main = "Association of test group and results",
            xlab = "Got results", ylab = "Test group")
 # We can see from this mosaic plot that there might be an association.
+```
+
+```{r association_mosaic, fig.height = 2.5, fig.width = 8, echo = FALSE}
+x <- matrix(c(2006695, 2009528, 705181, 702472), nrow = 2, byrow = FALSE)
+rownames(x) <- c("Group A", "Group B")
+colnames(x) <- c("Some results","Zero results")
+par(mar = c(2.5, 2.5, 2.5, 0), bg = "#F0F0F0",
+    col.lab = "#3C3C3C", col.axis = "#3C3C3C", col.main = "#3C3C3C")
+# c(5, 4, 4, 2) + 0.1 # c(bottom, left, top, right)
+mosaicplot(t(x), color = c("#F8766D", "#00BFC4"), border = "white",
+           main = "Association of test group and results",
+           xlab = "Results?", ylab = "Test group", margin = NULL)
 ```
 
 ```{r association_mosaic_by_class, fig.width = 10, fig.height = 5, dpi = 150}

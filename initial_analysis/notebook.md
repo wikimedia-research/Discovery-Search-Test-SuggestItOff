@@ -53,6 +53,45 @@ with(data, {
 a        0.7399656      0.2600344
 b        0.7409764      0.2590236
 
+
+```r
+x <- sub("^[a-z]+wik", "*wik", data$project)
+x[data$project == "mediawikiwiki"] <- 'mediawiki'
+x[data$project == "metawiki"] <- 'meta'
+x[data$project == "zh_yuewiki"] <- '*wiki'
+x <- factor(x)
+data$project_generic <- x
+table(x)
+
+names(table(x)) %>% paste0(collapse = "', '") %>% sprintf("c('%s')", .)
+table(x) %>% as.numeric %>% paste0(collapse = ", ") %>% sprintf("c(%s)", .)
+y <- data %>%
+  dplyr::group_by(project_generic) %>%
+  dplyr::summarise(total = n(),
+                   `% in group a` = (function(x){
+                     round(100*sum(x == "a")/length(x),2)
+                     })(test_group),
+                   `% in group b` = (function(x){
+                     round(100*sum(x == "b")/length(x),2)
+                     })(test_group)) %>%
+  dplyr::arrange(desc(total))
+y %>% kable
+
+data$project_major <- data$project_generic %in% as.character(y$project_generic[y$total > 600])
+data %>%
+  dplyr::filter(project_major) %>%
+  dplyr::group_by(project_generic) %>%
+  dplyr::summarise(
+    `Chi-square test p-values` = (function(x){
+    chisq.test(table(x[,1], x[,2]), correct = FALSE)$p.value
+  })(cbind(test_group, results)),
+  `Significant` = ifelse(`Chi-square test p-values` < 0.05, '*', ''),
+  `Odds Ratio` = (function(x){
+    y <- mosaic::oddsRatio(table(x[,1], x[,2]))
+    sprintf("%.3f | (%.3f, %.3f)", y, attr(y, "lower.OR"), attr(y, "upper.OR"))
+  })(cbind(test_group, results))) %>% kable(digits = 3)
+```
+
 ## Significance Testing
 
 
@@ -62,11 +101,13 @@ mosaicplot(results ~ test_group, data = data, shade = TRUE,
            xlab = "Got results", ylab = "Test group")
 ```
 
-![](notebook_files/figure-html/association_mosaic-1.png) 
+![](notebook_files/figure-html/association_mosaic_shade-1.png) 
 
 ```r
 # We can see from this mosaic plot that there might be an association.
 ```
+
+![](notebook_files/figure-html/association_mosaic-1.png) 
 
 
 ```r
@@ -99,13 +140,22 @@ with(keep_where(data, class == "Spider"), {
 ![](notebook_files/figure-html/association_mosaic_by_class-1.png) 
 
 
+
 ```r
 with(keep_where(data, country == "US" & class != "Spider"), {
   table(test_group, results)
 }) %>% transfer
 ```
 
+
+```r
+with(keep_where(data, project == "enwiki" & class != "Spider"), {
+  table(test_group, results)
+}) %>% transfer
+```
+
 **Hypothesis**: Group (A/B) and Results (Y/N) are independent.
+
 
 ```r
 group_results_odds_ratio <- with(data, {

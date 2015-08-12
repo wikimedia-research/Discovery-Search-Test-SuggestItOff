@@ -64,29 +64,19 @@ Before we delve into the analysis, let's get a quick idea of what we're analyzin
 
 ## Inference
 
-```{r, fig.height = 2.5, fig.width = 8, echo = FALSE}
-x <- matrix(c(2006695, 2009528, 705181, 702472), nrow = 2, byrow = FALSE)
-rownames(x) <- c("Group A", "Group B")
-colnames(x) <- c("Some results","Zero results")
-par(mar = c(2.5, 2.5, 2.5, 0), bg = "#F0F0F0",
-    col.lab = "#3C3C3C", col.axis = "#3C3C3C", col.main = "#3C3C3C")
-# c(5, 4, 4, 2) + 0.1 # c(bottom, left, top, right)
-mosaicplot(t(x), color = c("#F8766D", "#00BFC4"), border = "white",
-           main = "Association of test group and results",
-           xlab = "Results?", ylab = "Test group", margin = NULL)
-```
+<img src="notebook_files/figure-html/association_mosaic-1.png" width="100%" style = "width:100%; margin-top: -10px;">
 
 What we want to see is the "some results" quadrant a lot wider in B than it is in A. However, it seems as if they're almost exactly the same in size.
 
 <p style="color:black;"><strong>Hypothesis</strong>: Group (A vs B) and Results (Some vs Zero) are independent (not related).</p>
 
-Using this initial set of data, we can reject the hypothesis (p = 0.0073). The odds of getting results for those in group B (new method, blue, 2.861) were 1.005 times the odds for those in group A (control, red, 2.846). The 95% confidence interval for the odds ratio is (1.0014, 1.0091).
+Using this initial set of data, we found evidence that B (new method, blue) is getting better results A (control, red). This improvement is small, but statistically significant.<!--(reject hypothesis with p = 0.0073)-->. The odds of getting results for those in group B (2.861 odds) were 1.005 times the odds for those in group A (2.846 odds). The 95% confidence interval for the odds ratio is (1.0014, 1.0091).
 
 ## Breakdown by class
 
 Let's break it by class:
 
-<img src="notebook_files/figure-html/association_mosaic_by_class-1.png" style = "width:100%">
+<img src="notebook_files/figure-html/association_mosaic_by_class-1.png" width="100%" style = "width:100%">
 
 ## Actual users querying from... <span style="color:cornflowerblue;">US</span>
 
@@ -126,18 +116,18 @@ x %>% prop.table(margin = 1) %>% apply(1:2, function(xx) {
 
 ## Analysis of associaton by Project
 
-|Project         | Test of independence   | Odds Ratio |95% Conf. Int.|
+|Project         | Test of independence   | Odds Ratio |95% Conf. Int.
 |:---------------|-----------------------:|:----:|:--------------:|
-|\*wiki          |            **\* 0.024**|1.004 | (1.001, 1.008) |
-|\*wikibooks     |                   0.295|1.071 | (0.942, 1.219) |
-|\*wikinews      |                   0.151|1.251 | (0.921, 1.698) |
-|\*wikiquote     |                   0.524|1.033 | (0.934, 1.143) |
-|\*wikisource    |                   0.537|0.958 | (0.834, 1.099) |
-|\*wikiversity   |                   0.711|1.058 | (0.786, 1.424) |
-|\*wikivoyage    |                   0.769|0.972 | (0.804, 1.175) |
-|\*wiktionary    |        **\*\*\* 0.000**|1.083 | (1.041, 1.128) |
-|mediawiki       |                   0.400|0.907 | (0.724, 1.138) |
-|meta            |                   0.659|1.076 | (0.778, 1.487) |
+|\*wiki    |**significant => association**|1.004 | (1.001, 1.008) <!-- \* 0.024 -->
+|\*wikibooks     |               not sig. |1.071 | (0.942, 1.219) <!-- 0.295 -->
+|\*wikinews      |               not sig. |1.251 | (0.921, 1.698) <!-- 0.151 -->
+|\*wikiquote     |               not sig. |1.033 | (0.934, 1.143) <!-- 0.524 -->
+|\*wikisource    |               not sig. |0.958 | (0.834, 1.099) <!-- 0.537 -->
+|\*wikiversity   |               not sig. |1.058 | (0.786, 1.424) <!-- 0.711 -->
+|\*wikivoyage    |               not sig. |0.972 | (0.804, 1.175) <!-- 0.769 -->
+|\*wiktionary|**very significant => association**|1.083 | (1.041, 1.128)
+|mediawiki       |               not sig. |0.907 | (0.724, 1.138) <!-- 0.400 -->
+|meta            |               not sig. |1.076 | (0.778, 1.487) <!-- 0.659 -->
 
 ## Retrospective
 
@@ -153,5 +143,5 @@ x %>% prop.table(margin = 1) %>% apply(1:2, function(xx) {
 
 ## Conclusions
 * The system works;
-* **In the initial dataset**, Group B (the new method) is associated with better results overall, BUT only ever so slightly;
+* **In the initial dataset**, the new settings are associated with better results overall, BUT only slightly;
 * Things are promising, but we have some work to do before the next test.
