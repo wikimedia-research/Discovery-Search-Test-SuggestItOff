@@ -70,17 +70,17 @@ What we want to see is the "some results" quadrant a lot wider in B than it is i
 
 <p style="color:black;"><strong>Hypothesis</strong>: Group (A vs B) and Results (Some vs Zero) are independent (not related).</p>
 
-Using this initial set of data, we found evidence that B (new method, blue) is getting better results A (control, red). This improvement is small, but statistically significant.<!--(reject hypothesis with p = 0.0073)-->. The odds of getting results for those in group B (2.861 odds) were 1.005 times the odds for those in group A (2.846 odds). The 95% confidence interval for the odds ratio is (1.0014, 1.0091).
+Using this initial set of data, we found evidence that B (new method, blue) is getting better results than A (control, red). This improvement is small, but statistically significant!<!--(reject hypothesis with p = 0.0073)-->.
 
 ## Breakdown by class
 
-Let's break it by class:
+Let's break it down by class:
 
 <img src="notebook_files/figure-html/association_mosaic_by_class-1.png" width="100%" style = "width:100%">
 
 ## Actual users querying from... <span style="color:cornflowerblue;">US</span>
 
-As Oliver showed earlier, the largest geographical group in the dataset are the users from US (~32%). So what were actual (non-spider) users experiencing at that point in time?
+As Oliver showed earlier, the largest geographical group in the dataset are the users from US (~32%). So what were actual (non-spider) users from the US experiencing during the experiment?
 
 ```{r, echo = FALSE, eval = FALSE}
 x <- matrix(c(570260, 569517, 177328, 176973), nrow = 2, byrow = FALSE); colnames(x) <- c('Some results', 'Zero results'); rownames(x) <- c('a', 'b')
