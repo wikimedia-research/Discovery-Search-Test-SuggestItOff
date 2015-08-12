@@ -14,7 +14,7 @@ output:
 * We wanted to reduce the rate of zero results.
 * One way of doing this is to reduce the required "certainty" in a suggestion before Cirrus provides it to the user.
 * Lower certainty == more results given!
-* At the same time, we changed the smoothing algorithm to avoid giving *bad* results.
+* At the same time, we changed the smoothing algorithm to avoid giving **bad** results.
 
 ## The methodology
 
@@ -28,43 +28,67 @@ output:
 * On the face of it, it appears to; 0.01% variation in events between groups.
 
 ## Browsers
-<img src="../post_cleanup_browser_variation.png" width="100%">
+<img src="../post_cleanup_browser_variation.png" width="100%" style="width:100%">
 
 ## Geography
-<img src="../post_cleanup_geo_variation.png" width="100%">
+<img src="../post_cleanup_geo_variation.png" width="100%" style="width:100%">
 
 ## Analysis
 
 * So, sampling works - what next?
-* Analyse the actual data, looking for a statistically significant variation in whether any results were returned (TRUE) versus
-none whatsoever (FALSE)
-* Over to Mikhail!
+* Analyse the actual data, looking for a statistically significant change in results.
 
-## Exploratory data analysis
+## Exploratory data analysis (EDA)
 
-```{r, fig.height = 3, fig.width = 8, echo = FALSE}
+Oliver noticed that a specific IP address from Germany is an abusive spider responsible for 2.1 million of the observations. We are excluding its queries from analysis.
+
+Before we delve into the analysis, let's get a quick idea of what we're analyzing.
+
+| Queries Used In Analysis | Countries | Projects | % of actual users / spiders    |
+|:----------------:|:---------:|:--------:|:------------------------------:|
+|5423876           |228        |461       | 96% / 4% (24 users : 1 spider) |
+
+## EDA continued
+
+|Project           | Queries| % in A| % in B|
+|:-----------------|-------:|------------:|------------:|
+|\*wiki            | 5353941|        50.00|        50.00|
+|\*wiktionary      |   50196|        49.83|        50.17|
+|\*wikiquote       |    6336|        49.42|        50.58|
+|\*wikibooks       |    3928|        51.04|        48.96|
+|\*wikisource      |    3237|        50.08|        49.92|
+|\*wikivoyage      |    1761|        49.46|        50.54|
+|mediawiki         |    1203|        50.29|        49.71|
+|**other projects...**| 3274|          ...|          ...|
+|                  | total: 5423876| median: 50.185| median: 49.815|
+
+## Inference
+
+```{r, fig.height = 2.5, fig.width = 8, echo = FALSE}
 x <- matrix(c(2006695, 2009528, 705181, 702472), nrow = 2, byrow = FALSE)
 rownames(x) <- c("Group A", "Group B")
 colnames(x) <- c("Some results","Zero results")
-par(mar = c(2, 2, 2, 0)) # c(5, 4, 4, 2) + 0.1 # c(bottom, left, top, right)
-mosaicplot(t(x), color = c("cornflowerblue", "orange"), border = "white",
+par(mar = c(2.5, 2.5, 2.5, 0), bg = "#F0F0F0",
+    col.lab = "#3C3C3C", col.axis = "#3C3C3C", col.main = "#3C3C3C")
+# c(5, 4, 4, 2) + 0.1 # c(bottom, left, top, right)
+mosaicplot(t(x), color = c("#F8766D", "#00BFC4"), border = "white",
            main = "Association of test group and results",
            xlab = "Results?", ylab = "Test group", margin = NULL)
 ```
 
 What we want to see is the "some results" quadrant a lot wider in B than it is in A. However, it seems as if they're almost exactly the same in size.
 
-**Hypothesis**: Group (A vs B) and Results (Some vs Zero) are independent (not related).
+<p style="color:black;"><strong>Hypothesis</strong>: Group (A vs B) and Results (Some vs Zero) are independent (not related).</p>
 
-Using this initial set of data, we can reject the hypothesis (p = 0.0073). The odds of getting results for those in group B (orange) was 1.005 times the odds for those in group A (blue) -- 95% CI: (1.0014, 1.0091).
+Using this initial set of data, we can reject the hypothesis (p = 0.0073). The odds of getting results for those in group B (new method, blue, 2.861) were 1.005 times the odds for those in group A (control, red, 2.846). The 95% confidence interval for the odds ratio is (1.0014, 1.0091).
 
 ## Breakdown by class
 
-**Overall**, Group B (orange) is associated with better results, BUT only ever so slightly. Let's break it by class:
+Let's break it by class:
 
 <img src="notebook_files/figure-html/association_mosaic_by_class-1.png" style = "width:100%">
 
-## Actual users in US (for example)
+## Actual users querying from... <span style="color:cornflowerblue;">US</span>
 
 As Oliver showed earlier, the largest geographical group in the dataset are the users from US (~32%). So what were actual (non-spider) users experiencing at that point in time?
 
@@ -75,13 +99,45 @@ x %>% prop.table(margin = 1) %>% apply(1:2, function(xx) {
 }) %>% knitr::kable()
 ```
 
-|   |Some results          |Zero results          |
-|:--|:---------------------|:---------------------|
-|a  |570260 (76.28%)       |177328 (23.72%)       |
-|b  |569517 (76.29%)       |176973 (23.71%)       |
+|        |Some results          |Zero results          |
+|:-------|:---------------------|:---------------------|
+|Group A |570260 (76.28%)       |177328 (23.72%)       |
+|Group B |569517 (76.29%)       |176973 (23.71%)       |
 
-<br>
-Nearly the same percentages of queries from US got results (76.28% in A vs 76.29% in B). Significance testing showed the two are not associated (p = 0.86).
+<br>Nearly the same percentages of queries from US got results (76.28% in A vs 76.29% in B). Significance testing showed the two are not associated (p = 0.86).
+
+## Actual users querying... <span style="color:cornflowerblue;">enwiki</span>
+
+52.37% of the queries in the dataset analyzed were to the English Wikipedia. So let's take a look at how the groups performed among actual (non-spider) users.
+
+```{r, echo = FALSE, eval = FALSE}
+x <- matrix(c(1026558, 1026365, 287242, 286967), nrow = 2, byrow = FALSE); colnames(x) <- c('Some results', 'Zero results'); rownames(x) <- c('a', 'b')
+x %>% prop.table(margin = 1) %>% apply(1:2, function(xx) {
+  sprintf("%.2f%%", 100 * xx)
+}) %>% knitr::kable()
+```
+
+|         |Some results           |Zero results          |
+|:--------|:----------------------|:---------------------|
+|Group A  |1026558 (78.14%)       |287242 (21.86%)       |
+|Group B  |1026365 (78.15%)       |286967 (21.85%)       |
+
+<br>Nearly the same percentages of queries to enwiki got results (78.14% in A vs 78.15% in B). Significance testing showed the two are not associated (p = 0.8).
+
+## Analysis of associaton by Project
+
+|Project         | Test of independence   | Odds Ratio |95% Conf. Int.|
+|:---------------|-----------------------:|:----:|:--------------:|
+|\*wiki          |            **\* 0.024**|1.004 | (1.001, 1.008) |
+|\*wikibooks     |                   0.295|1.071 | (0.942, 1.219) |
+|\*wikinews      |                   0.151|1.251 | (0.921, 1.698) |
+|\*wikiquote     |                   0.524|1.033 | (0.934, 1.143) |
+|\*wikisource    |                   0.537|0.958 | (0.834, 1.099) |
+|\*wikiversity   |                   0.711|1.058 | (0.786, 1.424) |
+|\*wikivoyage    |                   0.769|0.972 | (0.804, 1.175) |
+|\*wiktionary    |        **\*\*\* 0.000**|1.083 | (1.041, 1.128) |
+|mediawiki       |                   0.400|0.907 | (0.724, 1.138) |
+|meta            |                   0.659|1.076 | (0.778, 1.487) |
 
 ## Retrospective
 
@@ -92,11 +148,10 @@ Nearly the same percentages of queries from US got results (76.28% in A vs 76.29
 ### What didn't work
 
 1. The data format needs a ton of tweaks. Mikhail has taken the lead on drafting a proposal for a new format, which LGTM.
-2. Setting things up as a proper scientific experiment (Theory - Hypothesis - Experiment - Result) wasn't done. In future we
-need to include the Swifties in conversations about what we're doing + how + why if we want the results to be useful.
+2. Setting things up as a proper scientific experiment (Theory - Hypothesis - Experiment - Result) wasn't done. In future we need to include the Swifties in conversations about what we're doing + how + why if we want the results to be useful.
 3. Due to (2) we haven't advanced our knowledge around search, which is a big benefit of running these tests.
 
 ## Conclusions
 * The system works;
-* [did the change work]
+* **In the initial dataset**, Group B (the new method) is associated with better results overall, BUT only ever so slightly;
 * Things are promising, but we have some work to do before the next test.

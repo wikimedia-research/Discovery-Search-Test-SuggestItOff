@@ -70,12 +70,17 @@ mosaicplot(results ~ test_group, data = data, shade = TRUE,
 
 
 ```r
-par(mfrow = c(1, 2))
+par(mfrow = c(1, 2),
+    bg = ggthemes_data$fivethirtyeight["ltgray"],
+    col.lab = ggthemes_data$fivethirtyeight["dkgray"],
+    col.main = ggthemes_data$fivethirtyeight["dkgray"],
+    col.axis = ggthemes_data$fivethirtyeight["dkgray"],
+    col.sub = ggthemes_data$fivethirtyeight["dkgray"])
 with(keep_where(data, class != "Spider"), {
   x <- table(test_group, results)
   # chisq.test(x)
   # mosaic::oddsRatio(x, verbose = TRUE)
-  mosaicplot(t(x), color = c("cornflowerblue", "orange"), border = "white",
+  mosaicplot(t(x), color = scales::hue_pal()(2), border = NA,
            main = "Actual users", cex.axis = 1,
            sub = "p = 0.004, OR = 1.006 (95%: 1.002, 1.01)",
            xlab = "Got zero results", ylab = "Test group")
@@ -84,7 +89,7 @@ with(keep_where(data, class == "Spider"), {
   x <- table(test_group, results)
   # chisq.test(x)
   # mosaic::oddsRatio(x, verbose = TRUE)
-  mosaicplot(t(x), color = c("cornflowerblue", "orange"), border = "white",
+  mosaicplot(t(x), color = scales::hue_pal()(2), border = NA,
            main = "Spiders", cex.axis = 1,
            sub = "p = 0.007, OR = 1.005 (95%: 1.001, 1.009)",
            xlab = "Got zero results", ylab = "Test group")
