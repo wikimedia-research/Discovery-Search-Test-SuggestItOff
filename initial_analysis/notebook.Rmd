@@ -89,6 +89,18 @@ data %>%
     y <- mosaic::oddsRatio(table(x[,1], x[,2]))
     sprintf("%.3f | (%.3f, %.3f)", y, attr(y, "lower.OR"), attr(y, "upper.OR"))
   })(cbind(test_group, results))) %>% kable(digits = 3)
+
+data %>%
+  dplyr::group_by(source) %>%
+  dplyr::summarise(
+    `Chi-square test p-values` = (function(x){
+    chisq.test(table(x[,1], x[,2]), correct = FALSE)$p.value
+  })(cbind(test_group, results)),
+  `Significant` = ifelse(`Chi-square test p-values` < 0.05, '*', ''),
+  `Odds Ratio` = (function(x){
+    y <- mosaic::oddsRatio(table(x[,1], x[,2]))
+    sprintf("%.3f | (%.3f, %.3f)", y, attr(y, "lower.OR"), attr(y, "upper.OR"))
+  })(cbind(test_group, results))) %>% kable(digits = 3)
 ```
 
 ## Significance Testing

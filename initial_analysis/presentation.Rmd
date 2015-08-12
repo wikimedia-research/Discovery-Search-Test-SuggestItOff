@@ -118,7 +118,7 @@ x %>% prop.table(margin = 1) %>% apply(1:2, function(xx) {
 
 |Project         | Test of independence   | Odds Ratio |95% Conf. Int.
 |:---------------|-----------------------:|:----:|:--------------:|
-|\*wiki    |**significant => association**|1.004 | (1.001, 1.008) <!-- \* 0.024 -->
+|\*wikipedia    |**significant => association**|1.004 | (1.001, 1.008) <!-- \* 0.024 -->
 |\*wikibooks     |               not sig. |1.071 | (0.942, 1.219) <!-- 0.295 -->
 |\*wikinews      |               not sig. |1.251 | (0.921, 1.698) <!-- 0.151 -->
 |\*wikiquote     |               not sig. |1.033 | (0.934, 1.143) <!-- 0.524 -->
@@ -128,6 +128,13 @@ x %>% prop.table(margin = 1) %>% apply(1:2, function(xx) {
 |\*wiktionary|**very significant => association**|1.083 | (1.041, 1.128)
 |mediawiki       |               not sig. |0.907 | (0.724, 1.138) <!-- 0.400 -->
 |meta            |               not sig. |1.076 | (0.778, 1.487) <!-- 0.659 -->
+
+## Analysis of association by Source
+
+|Source | Test of independence |Odds Ratio                  |95% Conf. Int.
+|:------|------------------------:|:-----------|:---------------------------|
+|api    |                    not sig.|1.002 | (0.998, 1.006) <!-- 0.247 -->
+|web    |                    **very significant => association**|1.047 | (1.032, 1.062) |
 
 ## Retrospective
 
