@@ -52,7 +52,7 @@ Before we delve into the analysis, let's get a quick idea of what we're analyzin
 
 |Project           | Queries| % in A| % in B|
 |:-----------------|-------:|------------:|------------:|
-|\*wiki            | 5353941|        50.00|        50.00|
+|\*wikipedia       | 5353941|        50.00|        50.00|
 |\*wiktionary      |   50196|        49.83|        50.17|
 |\*wikiquote       |    6336|        49.42|        50.58|
 |\*wikibooks       |    3928|        51.04|        48.96|
