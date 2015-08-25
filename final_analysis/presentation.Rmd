@@ -25,19 +25,19 @@ For the final analysis we examined 7 days of logs, removing entries that only co
 
 ![Association](../final_association.png)
 
-As with the initial test, there is no visually distinct variation between the outcome for Group A (the control group) or Group B (the test group). When we perform a Chi-Squared test for statistical significance we find a P-value of 0.00006, indicating that even if the variation in outcome is small, it *is* statistically significant and is unlikely to be from chance.
+As with the initial test, there is no visually distinct difference between the outcome for Group A (the control group) or Group B (the test group). When we perform a Chi-Squared test for statistical significance we find a P-value of 0.00006, indicating that even if the difference in outcome is small, it *is* statistically significant and is unlikely to be from chance.
 
-What that variation favours, however, is not Group B, as seen in the initial analysis - it's Group A. People given the default treatment are statistically significantly more likely to get results than those subject to the experimental treatment, albeit not enough to make much of a difference (the improvement is
+What that difference favours, however, is not Group B, as seen in the initial analysis - it's Group A. People given the default treatment are statistically significantly more likely to get results than those subject to the experimental treatment, albeit not enough to make much of a difference (the improvement is
 0.08%)
 
 So, the final analysis has produced the opposite outcome to the initial analysis. What does this mean?
 
-The most probable reason for this is the size of the datasets. When dealing with 7m and 13m events, respectively, over two conditions, it is possible to see statistically significant outcomes - ones that vary wildly depending on *which* large sample is being used - where nothing is really taking place. It's simply the natural variation in the datasets on a large enough scale that significance is possible to achieve.
+The most probable reason for this is the size of the datasets. When dealing with 7m and 13m events, respectively, over two conditions, it is possible to see statistically significant outcomes - ones that vary wildly depending on *which* large sample is being used - where nothing is really taking place. It's simply the natural difference in the datasets on a large enough scale that significance is possible to achieve.
 
 One solution for this problem is to perform power analyses before experiments to identify the number of results needed to see an effect, and using this to inform our sampling rate. That way we can be more certain that any effect we see is at least a real effect. We can also (instead of, or in addition to, power analysis) switch to a more Bayesian approach to A/B testing that is not as vulnerable to this class of issue.
 
 ## Conclusion
 
-Based on the tiny effect size seen, and the variation in the direction of this effect between the initial and final sample, we argue that the experiment failed to demonstrate an improvement in the zero results rate for searches in the testing group We recommend that the experiment be switched off, and that all users should recieve the existing, 'default' search experience.
+Based on the tiny effect size seen, and the difference in the direction of this effect between the initial and final sample, we argue that the experiment failed to demonstrate an improvement in the zero results rate for searches in the testing group We recommend that the experiment be switched off, and that all users should recieve the existing, 'default' search experience.
 
 In terms of how we approach future experiments, the conclusions of the initial analysis around experimental design stand, but are augmented with a recommendation that power analysis be performed prior to the setting of a sample rate, for each A/B test we deploy.
